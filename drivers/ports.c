@@ -7,7 +7,7 @@
 
 uint8_t inb(uint16_t port) {
     uint8_t output;
-    asm("in %%dx, %%al": "=a" (result) : "d" (port));
+    asm("in %%dx, %%al": "=a" (output) : "d" (port));
 
     return output;
 }
@@ -18,7 +18,7 @@ void outb(uint16_t port, uint8_t data) {
 
 uint16_t inw(uint16_t port) {
     uint16_t output;
-    asm("in %%dx, %%al": "=a" (result) : "d" (port));
+    asm("in %%dx, %%al": "=a" (output) : "d" (port));
 
     return output;
 }
