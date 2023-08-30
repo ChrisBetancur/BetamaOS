@@ -7,22 +7,22 @@
 
 uint8_t inb(uint16_t port) {
     uint8_t output;
-    asm("in %%dx, %%al": "=a" (output) : "d" (port));
+    __asm__("in %%dx, %%al": "=a" (output) : "d" (port));
 
     return output;
 }
 
 void outb(uint16_t port, uint8_t data) {
-    asm("out %%al, %%dx" :: "a" (data), "d" (port));
+    __asm__("out %%al, %%dx" :: "a" (data), "d" (port));
 }
 
 uint16_t inw(uint16_t port) {
     uint16_t output;
-    asm("in %%dx, %%al": "=a" (output) : "d" (port));
+    __asm__("in %%dx, %%al": "=a" (output) : "d" (port));
 
     return output;
 }
 
 void outw(uint16_t port, uint8_t data) {
-    asm("out %%al, %%dx" :: "a" (data), "d" (port));
+    __asm__("out %%al, %%dx" :: "a" (data), "d" (port));
 }

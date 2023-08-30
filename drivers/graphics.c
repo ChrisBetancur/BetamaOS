@@ -28,8 +28,8 @@ void kprint_at(char *str, int col, int row) {
 
     int i = 0;
 
-    while(str[i] != '\0') {
-        offset = print_char(str[i], col, row);
+    while(str[i] != 0) {
+        offset = print_char(str[i++], col, row, WHITE_ON_BLACK);
         // after each print char then  the new cursor offset is set then get new row and col
         row = get_cursor_row(offset);
         col = get_cursor_col(offset);
@@ -54,15 +54,16 @@ void clear_screen();
 
 // printing in text mode
 int print_char(char character, int col, int row, char attrib) {
-     unsigned char *vidmem = (uint8_t*) VIDEO_ADDRESS;
+     unsigned char *vidmem = (unsigned char*) VIDEO_ADDRESS;
 
      if (!attrib)
          attrib = WHITE_ON_BLACK;
 
      int offset;
 
-     if (col >= 0 && row >= 0)
+     if (col >= 0 && row >= 0) {
         offset = get_cursor_offset(col, row);
+     }
      else
         offset = get_cursor();
 
@@ -75,7 +76,7 @@ int print_char(char character, int col, int row, char attrib) {
      else {
         vidmem[offset] = character;
         vidmem[offset + 1] = attrib;
-        offset += 2
+        offset += 2;
      }
 
      //offset = handle_scrolling(offset);
@@ -91,7 +92,7 @@ int get_cursor() {
     int offset = inb(REG_SCREEN_DATA) << 8; // convert to high byte
 
     outb(REG_SCREEN_DATA, 15); // low byte of cursors offset
-    offset += inb(REG_SCRENN_DATA);
+    offset += inb(REG_SCREEN_DATA);
 
     return offset * 2;
 }
@@ -100,10 +101,10 @@ void set_cursor(int offset) {
     offset /= 2;
 
     outb(REG_SCREEN_CTRL, 14); // prep to set the new high byte
-    outb(REG_SCREEN_DATA, (uint8_t) (offset >> 8));
+    outb(REG_SCREEN_DATA, (unsigned char) (offset >> 8));
 
     outb(REG_SCREEN_CTRL, 15);
-    outb(REG_SCREEN_DATA, (uint8_t) (offset & 0xff));
+    outb(REG_SCREEN_DATA, (unsigned char) (offset & 0xff));
 }
 
 // get cursor through the col and row of the cursor
