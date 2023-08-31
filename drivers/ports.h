@@ -1,17 +1,17 @@
 #ifndef PORTS_H
 #define PORTS_H
 
-#include <stdint.h>
+#include "../libc/type.h"
 
-#define asm __asm__ __volatile__
+//#define asm __asm__ __volatile__
 
-unsigned char inb(unsigned short port);
+uint8 inb(uint16 port);
 
 // update the contents of the port
-void outb(unsigned short port, unsigned char data);
+void outb(uint16 port, uint8 data);
 
-unsigned short inw(unsigned short port);
+uint16 inw(uint16 port);
 
-void outw(unsigned short port, unsigned char data);
+void outw(uint16 port, uint8 data);
 
 #endif
