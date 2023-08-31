@@ -5,24 +5,28 @@
 // "=a"(result) means: put AL register in variable Result when finished
 // "d" (port) means: load EDX with port
 
-uint8_t inb(uint16_t port) {
-    uint8_t output;
-    __asm__("in %%dx, %%al": "=a" (output) : "d" (port));
-
-    return output;
+unsigned char inb(unsigned short port) {
+    unsigned char result;
+    // "=a"(result) means: put AL register in variable Result when finished
+    // "d" (port) means: load EDX with port
+    // in inline asm, dest and src registers are switched
+    __asm__("in %%dx, %%al": "=a" (result) : "d" (port));
+    return result;
 }
 
-void outb(uint16_t port, uint8_t data) {
-    __asm__("out %%al, %%dx" :: "a" (data), "d" (port));
+// update the contents of the port
+void outb(unsigned short port, unsigned char data) {
+    __asm__("out %%al, %%dx":: "a" (data), "d" (port));
 }
 
-uint16_t inw(uint16_t port) {
-    uint16_t output;
-    __asm__("in %%dx, %%al": "=a" (output) : "d" (port));
-
-    return output;
+// same is port_byte in but it returns short (2 bytes) instead of char (1 byte)
+unsigned short inw(unsigned short port) {
+    unsigned short result;
+    __asm__("in %%dx, %%al": "=a" (result): "d" (port));
+    return result;
 }
 
-void outw(uint16_t port, uint8_t data) {
-    __asm__("out %%al, %%dx" :: "a" (data), "d" (port));
+void outw(unsigned short port, unsigned char data) {
+    __asm__("out %%al, %%dx":: "a" (data), "d" (port));
 }
+

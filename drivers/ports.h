@@ -5,12 +5,13 @@
 
 #define asm __asm__ __volatile__
 
-uint8_t inb(uint16_t port);
+unsigned char inb(unsigned short port);
 
-void outb(uint16_t port, uint8_t data);
+// update the contents of the port
+void outb(unsigned short port, unsigned char data);
 
-uint16_t inw(uint16_t port);
+unsigned short inw(unsigned short port);
 
-void outw(uint16_t port, uint8_t data);
+void outw(unsigned short port, unsigned char data);
 
 #endif

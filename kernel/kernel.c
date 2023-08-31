@@ -1,5 +1,8 @@
 #include "../drivers/graphics.h"
 
 void main() {
-    kprint_at("hello", 3, 3);
+    clear_screen();
+    kprint_at("hello", 0, 0);
+    kprint("hello there?");
+    kprint("hello there?");
 }
