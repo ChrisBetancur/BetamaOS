@@ -1,12 +1,13 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
-#include "types.h"
+#include "type.h"
+
 
 void memcpy(char src[], char dest[], int size);
 
-void memset(u8 *dest, u8 src, u32 len);
+void memset(uint8 *dest, uint8 data, uint32 len);
 
-u32 kmalloc(u32 size, int align, u32 *phys_addr);
+uint32 kmalloc(uint32 size, int align, uint32 *phys_addr);
 
 #endif

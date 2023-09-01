@@ -1,7 +1,7 @@
 sources = $(wildcard kernel/*.c drivers/*.c cpu/*.c libc/*.c)
 headers = $(wildcard kernel/*.h drivers/*.h cpu/*.h libc/*.h)
 # RESEARCH WHY ADD THE INTERRUPT HERE
-objects = $(sources:.c=.o)
+objects = $(sources:.c=.o cpu/isr_dispatch.o cpu/iqr_dispatch.o)
 flags = -g -Wall -lm -ldl -fPIC -rdynamic
 
 cc = /home/c_bet/build-i686-elf/bin/i686-elf-gcc

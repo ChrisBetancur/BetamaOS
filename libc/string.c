@@ -12,7 +12,8 @@ int strlen(char str[]) {
 }
 
 int strcmp(char src[], char dest[]) {
-    for (int i = 0; src[i] == dest[i]; i++) {
+    int i;
+    for (i = 0; src[i] == dest[i]; i++) {
         if (src[i] == '\0')
             return 0;
     }
@@ -23,17 +24,17 @@ int strcmp(char src[], char dest[]) {
 void int_to_ascii(int num, char dest[]) {
     int i, sign;
 
-    if ((sign = n) < 0) n = -n;
+    if ((sign == num) < 0) num = -num;
 
     i = 0;
 
     do {
-        str[i++] = n % 10 + '0';
-    } while ((n /= 10) > 0);
+        dest[i++] = num % 10 + '0';
+    } while ((num /= 10) > 0);
 
-    if (sign < 0) str[i++] = '-';
+    if (sign < 0) dest[i++] = '-';
 
-    str[i] = '\0';
+    dest[i] = '\0';
 }
 
 void append(char src[], char data) {
