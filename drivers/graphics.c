@@ -99,7 +99,7 @@ int print_char(char character, int col, int row, char attrib_byte) {
         offset += 2;
     }
 
-    //offset = handle_scrolling(offset);
+    offset = handle_scrolling(offset);
 
 
     set_cursor_offset(offset);

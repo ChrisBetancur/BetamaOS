@@ -3,6 +3,8 @@
 #include "../drivers/graphics.h"
 #include "../drivers/ports.h"
 #include "../libc/string.h"
+#include "timer.h"
+#include "../drivers/keyboard.h"
 
 void isr_install() {
     set_idt_gate(0, (uint32)isr0);
@@ -76,6 +78,8 @@ void irq_install() {
     // enable interruptions
     asm volatile("sti");
     // initialize
+    init_timer(50);
+    init_keyboard();
 }
 
 char *exception_messages[] = {

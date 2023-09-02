@@ -43,3 +43,7 @@ void append(char src[], char data) {
     src[len] = data;
     src[len + 1] = '\0';
 }
+
+void backspace(char src[]) {
+    src[strlen(src) - 1] = '\0';
+}

@@ -10,4 +10,6 @@ void int_to_ascii(int num, char dest[]);
 
 void append(char src[], char data);
 
+void backspace(char src[]);
+
 #endif
