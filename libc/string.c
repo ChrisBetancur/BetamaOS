@@ -1,49 +1,73 @@
-
 #include "string.h"
+#include "../drivers/graphics.h"
+#include "types.h"
 
-int strlen(char str[]) {
+void int_to_ascii(int n, char str[]) {
+    int i, sign;
+    if ((sign = n) < 0) n = -n;
+    i = 0;
+    do {
+        str[i++] = n % 10 + '0';
+    } while ((n /= 10) > 0);
+
+    if (sign < 0) str[i++] = '-';
+    str[i] = '\0';
+}
+
+void hex_to_ascii(int n, char str[]) {
+    append(str, '0');
+    append(str, 'x');
+    char zeros = 0;
+
+    s32 tmp;
+    int i;
+    for (i = 28; i > 0; i -= 4) {
+        tmp = (n >> i) & 0xF;
+        if (tmp == 0 && zeros == 0) continue;
+        zeros = 1;
+        if (tmp > 0xA) append(str, tmp - 0xA + 'a');
+        else append(str, tmp + '0');
+    }
+
+    tmp = n & 0xF;
+    if (tmp >= 0xA) append(str, tmp - 0xA + 'a');
+    else append(str, tmp + '0');}
+
+void reverse(char s[]) {
+    int j, c;
+    for (int i = 0; j = strlen(s) - 1; i++, j--) {
+        c = s[i];
+        s[i] = s[j];
+        s[j] = c;
+    }
+}
+
+int strlen(char s[]) {
     int i = 0;
 
-    while (str[i] != '\0') {
-        i++;
-    }
+    while (s[i] != '\0') i++;
 
     return i;
 }
 
-int strcmp(char src[], char dest[]) {
+int strcmp(char s1[], char s2[]) {
     int i;
-    for (i = 0; src[i] == dest[i]; i++) {
-        if (src[i] == '\0')
-            return 0;
+    for (i = 0; s1[i] == s2[i]; i++) {
+        if (s1[i] == '\0') return 0;
     }
-
-    return src[i] - dest[i];
+    return s1[i] - s2[i];
 }
 
-void int_to_ascii(int num, char dest[]) {
-    int i, sign;
+void append(char s[], char n) {
+    int len = strlen(s);
 
-    if ((sign == num) < 0) num = -num;
-
-    i = 0;
-
-    do {
-        dest[i++] = num % 10 + '0';
-    } while ((num /= 10) > 0);
-
-    if (sign < 0) dest[i++] = '-';
-
-    dest[i] = '\0';
+    s[len] = n;
+    s[len + 1] = '\0';
 }
 
-void append(char src[], char data) {
-    int len = strlen(src);
-
-    src[len] = data;
-    src[len + 1] = '\0';
+void backspace(char s[]) {
+    int len = strlen(s);
+    s[len - 1] = '\0';
 }
 
-void backspace(char src[]) {
-    src[strlen(src) - 1] = '\0';
-}
+

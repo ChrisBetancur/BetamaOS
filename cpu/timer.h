@@ -1,8 +1,9 @@
+
 #ifndef TIMER_H
 #define TIMER_H
 
-#include "../libc/type.h"
+#include "../libc/types.h"
 
-void init_timer(uint32 freq);
+void init_timer(u32 freq);
 
 #endif

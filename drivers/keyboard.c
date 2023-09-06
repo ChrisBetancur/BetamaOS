@@ -2,15 +2,13 @@
 #include "../drivers/ports.h"
 #include "../cpu/isr.h"
 #include "../libc/string.h"
-#include "../libc/type.h"
 
-#define BACKSPACE 0x0E
-#define ENTER 0x1C
+#define BACKSPACE 0x0e
+#define ENTER 0x1c
 
 static char key_buffer[256];
 
 #define SC_MAX 57
-#define SC_PORT 0x60
 
 // defining scan codes
 const char *sc_name[] = {
@@ -31,9 +29,9 @@ const char sc_ascii[] = {
     'B', 'N', 'M', ',', '.', '/', '?', '?', '?', ' '
 };
 
-static void keyboard_callback(registers_t r) {
-    // PIC will leave the scan code in port 0x60
-    uint8 scan_code = inb(SC_PORT);
+static void keyboard_callback(registers_t regs) {
+    // PIC will leave the scancode in port 0x60
+    u8 scan_code = port_byte_in(0x60);
 
     if (scan_code > SC_MAX)
         return;
@@ -51,7 +49,6 @@ static void keyboard_callback(registers_t r) {
         char letter = sc_ascii[(int) scan_code];
 
         char str[2] = {letter, '\0'};
-
         append(key_buffer, letter);
         kprint(str);
     }

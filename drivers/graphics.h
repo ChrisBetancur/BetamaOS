@@ -9,20 +9,17 @@
 
 #define WHITE_ON_BLACK 0x0f
 
-// VGA I/O ports
-#define REG_SCREEN_CTRL 0x3d4
-#define REG_SCREEN_DATA 0x3d5
+// Screen device I/O ports
+#define REG_SCREEN_CTRL 0x3d4 // I/O port address used to control the VGA screen
+#define REG_SCREEN_DATA 0x3d5 // I/O port address used for sending data to the VGA screen
 
-// Text mode functions
-void kprint_at(char *str, int col, int row);
+// public functions
+void kprint_at(char* msg, int col, int row);
 
-void kprint(char *str);
+void kprint(char* msg);
 
 void kprint_backspace();
 
 void clear_screen();
-
-// Graphics mode functions
-
 
 #endif

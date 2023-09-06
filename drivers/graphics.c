@@ -1,10 +1,10 @@
-
 #include "graphics.h"
 #include "ports.h"
-#include <stdint.h>
-#include "../libc/type.h"
+#include "../libc/string.h"
+#include "../libc/mem.h"
 
-// private functions definitions
+// Private Kernel API functions
+
 int print_char(char character, int col, int row, char attribute_byte);
 
 int get_cursor();
@@ -53,22 +53,9 @@ void kprint_backspace() {
     print_char(0x08, col, row, WHITE_ON_BLACK);
 }
 
-void clear_screen() {
-    uint8* screen = (uint8*) VIDEO_ADDRESS;
-
-    for (int i = 0; i < SCREEN_SIZE_T; i++) {
-        screen[i * 2] = ' ';
-        screen[i * 2 + 1] = WHITE_ON_BLACK;
-    }
-
-    set_cursor_offset(get_cursor_offset(0, 0));
-}
-
-
-/* PRIVATE FUNCTIONS */
-// Print char at location
+// Princ char at location
 int print_char(char character, int col, int row, char attrib_byte) {
-    uint8* vidmem = (uint8*) VIDEO_ADDRESS;
+    unsigned char* vidmem = (unsigned char*) VIDEO_ADDRESS;
 
     if (!attrib_byte)
         attrib_byte = WHITE_ON_BLACK;
@@ -84,8 +71,9 @@ int print_char(char character, int col, int row, char attrib_byte) {
         offset = get_cursor();
     }
 
-    // if char is a newline char then set offset to the end of the current row so it will be advanced to the first col of the next row, otherwise, write the char and its attribute byte to video memory at calculated offset
+    // if char is a newline char then set offset to the end of the current row so it will be advanced to the first col of the next row, otherwise, write the char and its attribute byte to video memoryat calcualted offset
     if (character == '\n') {
+        row = get_cursor_row(offset);
         offset = get_cursor_offset(0, row + 1);
 
     }
@@ -113,13 +101,13 @@ int print_char(char character, int col, int row, char attrib_byte) {
 // once the internal register has been selected, we may read or write a byte on the data register.
 int get_cursor() {
     // selects its internal reg 14, which corresponds to the high byte of the cursor's offset
-    outb(REG_SCREEN_CTRL, 14);
+    port_byte_out(REG_SCREEN_CTRL, 14);
     // Reads the high byte of the cursor's offset from the data register then converts it to a high byte
-    int offset = inb(REG_SCREEN_DATA) << 8;
+    int offset = port_byte_in(REG_SCREEN_DATA) << 8;
     // select the reg 15 which is the low byte of the cursor's offset
-    outb(REG_SCREEN_CTRL, 15);
+    port_byte_out(REG_SCREEN_CTRL, 15);
     // reads the low byte of the cursor's offset
-    offset = inb(REG_SCREEN_DATA);
+    offset += port_byte_in(REG_SCREEN_DATA);
 
     // Since the cursor offset reported by the VGA hardware is the number of chars, we multiply
     // by two to convert it to a char cell offset
@@ -131,14 +119,14 @@ void set_cursor_offset(int offset) {
     offset /= 2;
 
     // select reg 14 in charge of the high byte of the cursor's offset
-    outb(REG_SCREEN_CTRL, 14);
+    port_byte_out(REG_SCREEN_CTRL, 14);
     // set the new offset to the cursor's offset, shift 8 for the high byte
-    outb(REG_SCREEN_DATA, (uint8) (offset >> 8));
+    port_byte_out(REG_SCREEN_DATA, (unsigned char) (offset >> 8));
 
     // select reg 15 in charge of the low byte of the cursor's offset
-    outb(REG_SCREEN_CTRL, 15);
+    port_byte_out(REG_SCREEN_CTRL, 15);
     //set the new offset to the cursor's offset, and the offset to 0xff for the low byte
-    outb(REG_SCREEN_DATA, (unsigned char) (offset & 0xff));
+    port_byte_out(REG_SCREEN_DATA, (unsigned char) (offset & 0xff));
 }
 
 int get_cursor_offset(int col, int row) {
@@ -150,19 +138,20 @@ int get_cursor_row(int offset) {
 }
 
 int get_cursor_col(int offset) {
+    //return offset / (2 * get_screen_offset_row(offset) * MAX_COLS);
     return (offset - (get_cursor_row(offset) * 2 * MAX_COLS)) / 2;
 }
 
 int handle_scrolling(int offset) {
-    if (offset < SCREEN_SIZE_T * 2) {
+    if (offset < MAX_ROWS * MAX_COLS * 2) {
         return offset;
     }
 
     for (int i = 1; i < MAX_ROWS; i++) {
-        //mem_copy(get_screen_offset(0, i) + VIDEO_ADDRESS, get_screen_offset(0, i - 1) + VIDEO_ADDRESS, MAX_COLS * 2);
+        mem_copy(get_cursor_offset(0, i) + VIDEO_ADDRESS, get_cursor_offset(0, i - 1) + VIDEO_ADDRESS, MAX_COLS * 2);
     }
 
-    char* last_line = (char*) get_cursor_offset(0, MAX_ROWS - 1) + VIDEO_ADDRESS;
+    char* last_line = get_cursor_offset(0, MAX_ROWS - 1) + VIDEO_ADDRESS;
 
     for (int i = 0; i < MAX_COLS * 2; i++) {
         last_line[i] = 0;
@@ -174,4 +163,14 @@ int handle_scrolling(int offset) {
     return offset;
 }
 
+void clear_screen() {
+    int screen_size = MAX_COLS * MAX_ROWS;
+    char* screen = VIDEO_ADDRESS;
 
+    for (int i = 0; i < SCREEN_SIZE_T; i++) {
+        screen[i * 2] = ' ';
+        screen[i * 2 + 1] = WHITE_ON_BLACK;
+    }
+
+    set_cursor_offset(get_cursor_offset(0, 0));
+}

@@ -1,7 +1,7 @@
 sources = $(wildcard kernel/*.c drivers/*.c cpu/*.c libc/*.c)
 headers = $(wildcard kernel/*.h drivers/*.h cpu/*.h libc/*.h)
 # RESEARCH WHY ADD THE INTERRUPT HERE
-objects = $(sources:.c=.o cpu/isr_dispatch.o cpu/iqr_dispatch.o)
+objects = $(sources:.c=.o cpu/interrupt.o)
 flags = -g -Wall -lm -ldl -fPIC -rdynamic
 
 cc = /home/c_bet/build-i686-elf/bin/i686-elf-gcc
@@ -9,7 +9,7 @@ gdb = /home/c_bet/build-i686-elf/bin/i686-elf-gdb
 
 flags = -g
 
-os-image.bin: boot/boot_sector.bin kernel.bin
+os-image.bin: boot/boot_sect.bin kernel.bin
 	cat $^ > os-image.bin
 
 # '--oformat binary' deletes all symbols as a collateral, so we don't need

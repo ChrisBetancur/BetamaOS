@@ -2,14 +2,16 @@
 #ifndef STRING_H
 #define STRING_H
 
-int strlen(char str[]);
+void int_to_ascii(int n, char str[]);
 
-int strcmp(char src[], char dest[]);
+void reverse(char s[]);
 
-void int_to_ascii(int num, char dest[]);
+int strlen(char s[]);
 
-void append(char src[], char data);
+int strcmp(char s1[], char s2[]);
 
-void backspace(char src[]);
+void append(char s[], char n);
+
+void backspace(char s[]);
 
 #endif

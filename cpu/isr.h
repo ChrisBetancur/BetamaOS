@@ -1,8 +1,7 @@
-
 #ifndef ISR_H
 #define ISR_H
 
-#include "../libc/type.h"
+#include "../libc/types.h"
 
 // ISRs reserved for CPU exceptions, which have been defined in interrupts.asm and here have been a defined a prototype for each of them so that they can be used in C since they were defined as global in asm
 extern void isr0();
@@ -79,10 +78,10 @@ extern void irq15();
 // the order of which these are defined matters as when pusha instruction is performed, they will populate each section accordingly for example edi is pushed last therefore the first defined
 // then the data segment will be pushed manually therefore completing register_t
 typedef struct {
-    uint32 ds; // Data segment selector
-    uint32 edi, esi, ebp, esp, ebx, edx, ecx, eax; // Pushed by pusha.
-    uint32 int_no, err_code; // Interrupt number and error code (if applicable)
-    uint32 eip, cs, eflags, useresp, ss; // Pushed by the processor automatically
+    u32 ds; // Data segment selector
+    u32 edi, esi, ebp, esp, ebx, edx, ecx, eax; // Pushed by pusha.
+    u32 int_no, err_code; // Interrupt number and error code (if applicable)
+    u32 eip, cs, eflags, useresp, ss; // Pushed by the processor automatically
 } registers_t;
 
 void isr_install();
@@ -91,15 +90,9 @@ void irq_install();
 
 void isr_handler(registers_t r);
 
-// represents isr_t as a pointer to a function that takes registers_t as an argument and returns void
+// represents isr_t as a pointer to a dunciton that takes registers_t as an argument and returns void
 typedef void (*isr_t) (registers_t r);
 
-void register_interrupt_handler(uint8 n, isr_t handler);
-
-#define SLAVE_PIC 0xA0
-#define MASTER_PIC 0x20
-#define EOI_SIGNAL 0x20
-
-void irq_handler(registers_t r);
+void register_interrupt_handler(u8 n, isr_t handler);
 
 #endif
