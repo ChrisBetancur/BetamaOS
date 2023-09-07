@@ -1,5 +1,5 @@
-sources = $(wildcard kernel/*.c drivers/*.c cpu/*.c libc/*.c)
-headers = $(wildcard kernel/*.h drivers/*.h cpu/*.h libc/*.h)
+sources = $(wildcard kernel/*.c drivers/*.c cpu/*.c libc/*.c shell/*.c)
+headers = $(wildcard kernel/*.h drivers/*.h cpu/*.h libc/*.h shell/*.h)
 # RESEARCH WHY ADD THE INTERRUPT HERE
 objects = $(sources:.c=.o cpu/interrupt.o)
 flags = -g -Wall -lm -ldl -fPIC -rdynamic

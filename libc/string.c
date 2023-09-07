@@ -70,4 +70,68 @@ void backspace(char s[]) {
     s[len - 1] = '\0';
 }
 
+char** split_str(char input[], char delimiter, int max_tokens) {
+    int token_count = 0;
+    int len = strlen(input);
 
+    if (len == 0)
+        return NULL;
+
+    int start = 0;
+    int end = 0;
+    int in_token = 0;
+
+    char* tokens[max_tokens];
+
+
+    for (int i = 0; i < len; i++) {
+        if (input[i] == delimiter) {
+            if (token_count < max_tokens) {
+
+                char str[end-start];
+
+                mem_copy(input, str, end - start);
+                tokens[token_count] = str;
+
+                //tokens[token_count][end - start] = '\0';
+                kprint(*tokens[token_count]);
+                kprint("\n");
+
+                token_count++;
+                start = i + 1;
+            }
+            else
+                return NULL; // EXCEEDED MAX TOKEN COUNT
+        }
+        else {
+            end = i + 1;
+            in_token = 1;
+        }
+        kprint("start=");
+
+        char s1[3];
+        int_to_ascii(start, s1);
+        kprint(s1);
+
+        kprint(", ");
+
+        char s2[3];
+        int_to_ascii(end, s2);
+        kprint(s2);
+
+        kprint("\n");
+        kprint("\n");
+    }
+
+    if (in_token && token_count < max_tokens) {
+        mem_copy(input, tokens[token_count], end - start);
+        tokens[token_count][end - start] = '\0';
+        token_count++;
+    }
+    else if (in_token && token_count >= max_tokens) {
+        return NULL;
+    }
+
+    kprint(tokens[0]);
+    return tokens;
+}

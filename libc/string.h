@@ -14,4 +14,6 @@ void append(char s[], char n);
 
 void backspace(char s[]);
 
+char** split_str(char input[], char delimiter, int max_tokens);
+
 #endif

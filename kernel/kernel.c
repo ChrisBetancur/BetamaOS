@@ -20,7 +20,7 @@ void user_input(char *input) {
     }
     else if (strcmp(input, "PAGE") == 0) {
         u32 phys_addr;
-        u32 page = kmalloc(1, 1, &phys_addr);
+        u32 page = kmalloc(20, 1, &phys_addr);
         char page_str[16] = "";
         hex_to_ascii(page, page_str);
         char phys_str[16] = "";
@@ -33,5 +33,5 @@ void user_input(char *input) {
 
     kprint("Input: ");
     kprint(input);
-    kprint("-\n>");
+    kprint("\n>");
 }

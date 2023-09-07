@@ -2,6 +2,8 @@
 #include "../drivers/ports.h"
 #include "../cpu/isr.h"
 #include "../libc/string.h"
+#include "../shell/shell.h"
+#include "../drivers/graphics.h"
 
 #define BACKSPACE 0x0e
 #define ENTER 0x1c
@@ -42,7 +44,9 @@ static void keyboard_callback(registers_t regs) {
     }
     else if (scan_code == ENTER) {
         kprint("\n");
-        user_input(key_buffer);
+
+        handle_cmd(key_buffer);
+        //user_input(key_buffer);
         key_buffer[0] = '\0';
     }
     else {

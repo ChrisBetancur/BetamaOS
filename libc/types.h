@@ -15,4 +15,9 @@ typedef char s8;
 #define low_16(address) (u16)(address & 0xffff)
 #define high_16(address) (u16)(((address) >> 16) & 0xffff)
 
+// define NULL
+
+#define NULL ((void*)0)
+
+
 #endif
