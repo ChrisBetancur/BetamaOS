@@ -1,6 +1,7 @@
 #include "string.h"
 #include "../drivers/graphics.h"
 #include "types.h"
+#include "../libc/mem.h"
 
 void int_to_ascii(int n, char str[]) {
     int i, sign;
@@ -81,24 +82,49 @@ char** split_str(char input[], char delimiter, int max_tokens) {
     int end = 0;
     int in_token = 0;
 
-    char* tokens[max_tokens];
+    //char* tokens[max_tokens];
 
+    // CHAR* IS 4 BYTES
+    char** tokens = kmalloc(max_tokens * 8, 1, NULL);
 
-    for (int i = 0; i < len; i++) {
-        if (input[i] == delimiter) {
+    for (int i = 0; i <= len; i++) {
+        if (input[i] == delimiter || i == len) {
             if (token_count < max_tokens) {
+                kprint("before call=");
 
-                char str[end-start];
+                char s1[3];
+                int_to_ascii(start, s1);
+                kprint(s1);
 
-                mem_copy(input, str, end - start);
-                tokens[token_count] = str;
+                kprint(", ");
 
-                //tokens[token_count][end - start] = '\0';
-                kprint(*tokens[token_count]);
+                char s2[3];
+                int_to_ascii(end, s2);
+                kprint(s2);
+
+                kprint("\n");
                 kprint("\n");
 
+                char* str = kmalloc(end - start + 1, 1, NULL);
+                mem_copy_at(input, str, start, end);
+                str[end-start] = '\0';
+                kprint("current str: ");
+                kprint(str);
+                kprint(", ");
+
+                char* size[3];
+                int_to_ascii(strlen(str), size);
+                kprint(size);
+                kprint("\n");
+                tokens[token_count] = str;
+
+                tokens[token_count][end - start] = '\0';
+
+                kprint(tokens[token_count]);
+                kprint("\n");
                 token_count++;
                 start = i + 1;
+                in_token = 0;
             }
             else
                 return NULL; // EXCEEDED MAX TOKEN COUNT
@@ -107,31 +133,10 @@ char** split_str(char input[], char delimiter, int max_tokens) {
             end = i + 1;
             in_token = 1;
         }
-        kprint("start=");
-
-        char s1[3];
-        int_to_ascii(start, s1);
-        kprint(s1);
-
-        kprint(", ");
-
-        char s2[3];
-        int_to_ascii(end, s2);
-        kprint(s2);
-
-        kprint("\n");
-        kprint("\n");
     }
 
-    if (in_token && token_count < max_tokens) {
-        mem_copy(input, tokens[token_count], end - start);
-        tokens[token_count][end - start] = '\0';
-        token_count++;
-    }
-    else if (in_token && token_count >= max_tokens) {
-        return NULL;
-    }
+    kprint(tokens[1]);
+    kprint("\n\n");
 
-    kprint(tokens[0]);
     return tokens;
 }

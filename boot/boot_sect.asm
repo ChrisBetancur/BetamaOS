@@ -31,6 +31,7 @@ load_kernel:
 
     ; RESEARCH how much space should i save for the OS
     mov bx, KERNEL_OFFSET ; Read from disk and store in 0x1000
+    ; it was 16 before now changed to 32 might cause problems in the future???
     mov dh, 16 ; will load 15 sectors from the boot disk instead of 1 so that to prevent the issues when trying to detect that we didn't read enough sectors
     ; this prevents an unloaded sector boundary
     mov dl, [BOOT_DRIVE]

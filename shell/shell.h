@@ -8,12 +8,12 @@
 typedef void (*cmd_t) (void* data);
 
 typedef struct {
-    char name;
+    char* name;
     cmd_t handler;
 } cmd_entry_t;
 
 // CURRENTLY COMMANDS SHOULD ONLY BE ONE WORD AND/OR ONE INPUT BESIDE
-#define CMD_ENTRIES 2
+#define CMD_ENTRIES 1
 
 cmd_entry_t cmd_entries[CMD_ENTRIES];
 

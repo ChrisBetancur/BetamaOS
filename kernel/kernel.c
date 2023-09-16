@@ -2,18 +2,20 @@
 #include "../libc/string.h"
 #include "../cpu/isr.h"
 #include "../cpu/timer.h"
+#include "../shell/shell.h"
 
 void main() {
     clear_screen();
     isr_install();
     irq_install();
+    shell_install();
 
     kprint("Type END to halt CPU...\n>");
 
 }
 
 
-void user_input(char *input) {
+/*void user_input(char *input) {
     if (strcmp(input, "END") == 0) {
         kprint("Stopping the CPU...\n");
         asm volatile("hlt");
@@ -34,4 +36,4 @@ void user_input(char *input) {
     kprint("Input: ");
     kprint(input);
     kprint("\n>");
-}
+}*/
