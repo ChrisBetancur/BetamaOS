@@ -19,9 +19,8 @@ cmd_entry_t cmd_entries[CMD_ENTRIES];
 
 void register_cmd(cmd_t cmd);
 
-// HANDLE COMMANDS LIKE HOW INTERRUPTS ARE HANDLEED IN ISR.C
-void handle_cmd(char buffer[]);
-
 void shell_install();
+
+void user_input(char *input);
 
 #endif

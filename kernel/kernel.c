@@ -10,7 +10,8 @@ void main() {
     irq_install();
     shell_install();
 
-    kprint("Type END to halt CPU...\n>");
+
+    kprint("betama$ ");
 
 }
 

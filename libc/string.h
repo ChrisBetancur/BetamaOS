@@ -16,4 +16,6 @@ void backspace(char s[]);
 
 char** split_str(char input[], char delimiter, int max_tokens);
 
+char** single_split_str(char input[], char delimiter);
+
 #endif

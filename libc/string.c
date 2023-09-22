@@ -53,6 +53,8 @@ int strlen(char s[]) {
 
 int strcmp(char s1[], char s2[]) {
     int i;
+
+
     for (i = 0; s1[i] == s2[i]; i++) {
         if (s1[i] == '\0') return 0;
     }
@@ -90,38 +92,15 @@ char** split_str(char input[], char delimiter, int max_tokens) {
     for (int i = 0; i <= len; i++) {
         if (input[i] == delimiter || i == len) {
             if (token_count < max_tokens) {
-                kprint("before call=");
-
-                char s1[3];
-                int_to_ascii(start, s1);
-                kprint(s1);
-
-                kprint(", ");
-
-                char s2[3];
-                int_to_ascii(end, s2);
-                kprint(s2);
-
-                kprint("\n");
-                kprint("\n");
 
                 char* str = kmalloc(end - start + 1, 1, NULL);
                 mem_copy_at(input, str, start, end);
                 str[end-start] = '\0';
-                kprint("current str: ");
-                kprint(str);
-                kprint(", ");
 
-                char* size[3];
-                int_to_ascii(strlen(str), size);
-                kprint(size);
-                kprint("\n");
                 tokens[token_count] = str;
 
                 tokens[token_count][end - start] = '\0';
 
-                kprint(tokens[token_count]);
-                kprint("\n");
                 token_count++;
                 start = i + 1;
                 in_token = 0;
@@ -137,6 +116,35 @@ char** split_str(char input[], char delimiter, int max_tokens) {
 
     kprint(tokens[1]);
     kprint("\n\n");
+
+    return tokens;
+}
+
+char** single_split_str(char input[], char delimiter) {
+
+    char** tokens = (char**)kmalloc(2 * sizeof(char*), 1, NULL);
+
+    int i = 0;
+    while (input[i] != delimiter && input[i] != '\0') {
+        i++;
+    }
+
+    tokens[0] = (char*)kmalloc(i + 1, 1, NULL); // Allocate memory for token[0] including null terminator
+    mem_copy_at(input, tokens[0], 0, i - 1);
+    tokens[0][i] = '\0'; // Null-terminate the first token
+
+
+    // Skip delimiter and move to the next character
+    while (input[i] == delimiter) {
+        i++;
+    }
+
+    // Calculate the length of the second token
+    int second_token_length = strlen(input + i);
+
+    tokens[1] = (char*)kmalloc(second_token_length + 1, 1, NULL); // Allocate memory for token[1] including null terminator
+    mem_copy_at(input, tokens[1], i, i + second_token_length - 1);
+    tokens[1][second_token_length] = '\0'; // Null-terminate the second token
 
     return tokens;
 }

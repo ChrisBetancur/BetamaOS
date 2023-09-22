@@ -7,19 +7,11 @@ void mem_copy(char* src, char* dest, int num_bytes) {
     }
 }
 
+// will copy char at index end
 void mem_copy_at(char* src, char* dest, int start, int end) {
-    //if (strlen(src) > end)
-        //return;
-
-    kprint(src);
-    kprint("\n");
-    for (int i = start; i < end; i++) {
+    for (int i = start; i <= end; i++) {
         dest[i - start] = src[i];
     }
-
-    kprint("final output: ");
-    kprint(dest);
-    kprint("\n");
 }
 
 void mem_set(u8 *dest, u8 val, u32 len) {

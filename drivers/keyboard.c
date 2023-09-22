@@ -39,14 +39,18 @@ static void keyboard_callback(registers_t regs) {
         return;
 
     if (scan_code == BACKSPACE) {
+        char empty[256];
+        if (strcmp(key_buffer, empty) == 0) {
+            return;
+        }
         backspace(key_buffer);
         kprint_backspace();
     }
     else if (scan_code == ENTER) {
         kprint("\n");
 
-        handle_cmd(key_buffer);
-        //user_input(key_buffer);
+        //handle_cmd(key_buffer);
+        user_input(key_buffer);
         key_buffer[0] = '\0';
     }
     else {
